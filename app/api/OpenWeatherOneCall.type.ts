@@ -7,7 +7,7 @@ export type OneCallResponse = {
     minutely: Minutely[]
     hourly: Hourly[]
     daily: Daily[]
-    alerts: Alert[]
+    alerts?: Alert[]
 }
 
 export type CurrentWeather = {
