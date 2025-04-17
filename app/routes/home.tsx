@@ -29,9 +29,9 @@ export default function Home() {
     <div className="flex flex-col items-center justify-center">
       <div className={twMerge("absolute top-0 left-0 w-full h-full bg-gradient-to-b dark:to-[#5E687E] dark:from-[#191F2B] -z-10", backgroundClass)} />
       <div>
-        <WeatherIcon iconCode={mainWeather.icon} className="max-w-full translate-y-1/2 -mt-[50%]" />
+        <WeatherIcon iconCode={mainWeather.icon} className="max-w-full translate-y-[40%] -mt-[40%]" />
       </div>
-      <div className="w-full rounded-t-4xl bg-secondary/30 dark:bg-primary/30 backdrop-blur-3xl flex flex-col items-center p-4">
+      <div className="w-full rounded-4xl bg-secondary/30 dark:bg-primary/30 backdrop-blur-3xl flex flex-col items-center p-4 md:p-8">
         <div className="font-family-fancy text-9xl">{Math.round(weatherData.current.temp)}</div>
         <p>{mainWeather.description}</p>
         <p>{`Gefühlt ${Math.round(weatherData.current.feels_like)}°`}</p>
