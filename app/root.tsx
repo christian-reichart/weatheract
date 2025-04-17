@@ -10,8 +10,8 @@ import {
 import type { Route } from "./+types/root"
 import "./app.css";
 import { Header } from "./components/layout/Header"
-import { twMerge } from "tailwind-merge";
-import { ThemeProvider } from "./theme/ThemeContext";
+import { twMerge } from "tailwind-merge"
+import { ThemeProvider } from "./theme/ThemeContext"
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -52,10 +52,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className={twMerge('font-family-plain bg-secondary text-primary dark:bg-primary dark:text-secondary')}>
+      <ThemeProvider>
         <Header />
         <main className="px-4 container mx-auto">
           {children}
         </main>
+      </ThemeProvider>
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -65,9 +67,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   return (
-    <ThemeProvider>
       <Outlet />
-    </ThemeProvider>
   )
 }
 

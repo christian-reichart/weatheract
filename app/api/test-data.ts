@@ -22,7 +22,7 @@ export const testData = {
         "id": 800,
         "main": "Clear",
         "description": "Klarer Himmel",
-        "icon": "01n"
+        "icon": "01d"
       }
     ]
   },
