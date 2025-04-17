@@ -9,7 +9,7 @@ import brokenCloudsNight from '../assets/weather_icons/broken_clouds_night.svg'
 import snow from '../assets/weather_icons/snow.svg'
 import mist from '../assets/weather_icons/mist.svg'
 
-export function WeatherIcon({ iconCode, ...other }: { iconCode: string } & React.ImgHTMLAttributes<HTMLImageElement>) {
+export function WeatherIcon({ iconCode, ...other }: { iconCode: string | undefined } & React.ImgHTMLAttributes<HTMLImageElement>) {
   switch (iconCode) {
     case '01d':
       return <img src={clearSkyDay} alt="clear sky" width="400" height="400" {...other} />

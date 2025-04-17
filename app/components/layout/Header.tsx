@@ -1,10 +1,9 @@
-import { ThemeSelect } from "~/theme/ThemeSelect";
-import { Logo } from "./Logo";
-import { useMatches, useRouteLoaderData } from "react-router";
-import { IconSettings } from "../icons/IconSettings";
-import { twMerge } from "tailwind-merge";
-import { Dialog } from "../ui/Dialog";
-import { useState } from "react";
+import { ThemeSelect } from "~/theme/ThemeSelect"
+import { Logo } from "./Logo"
+import { useRouteLoaderData } from "react-router"
+import { IconSettings } from "../icons/IconSettings"
+import { Dialog } from "../ui/Dialog"
+import { useState } from "react"
 
 export function Header() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)

@@ -1,4 +1,4 @@
-export function getBackgroundGradientClassName(iconCode: string) {
+export function getBackgroundGradientClassName(iconCode: string | undefined) {
   const baseClassName = "bg-gradient-to-b dark:from-[#5E687E] dark:to-[#191F2B]"
   switch (iconCode) {
   case '01d':
