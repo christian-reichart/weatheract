@@ -8,6 +8,8 @@ import brokenCloudsDay from '../assets/weather_icons/broken_clouds_day.svg'
 import brokenCloudsNight from '../assets/weather_icons/broken_clouds_night.svg'
 import snow from '../assets/weather_icons/snow.svg'
 import mist from '../assets/weather_icons/mist.svg'
+import lightning from '../assets/weather_icons/secondary/lightning.svg'
+import rain from '../assets/weather_icons/secondary/rain.svg'
 
 export function WeatherIcon({ iconCode, ...other }: { iconCode: string | undefined } & React.ImgHTMLAttributes<HTMLImageElement>) {
   switch (iconCode) {
@@ -41,5 +43,20 @@ export function WeatherIcon({ iconCode, ...other }: { iconCode: string | undefin
       return <img src={mist} alt="mist" {...other} />
     default:
       return <img src={clearSkyDay} alt="clear sky" width="400" height="400" {...other} />
+  }
+}
+
+export function SecondaryWeatherIcon({ iconCode, ...other }: { iconCode: string | undefined } & React.ImgHTMLAttributes<HTMLImageElement>) {
+  switch (iconCode) {
+    case '09d':
+    case '09n':
+    case '10d':
+    case '10n':
+      return <img src={rain} alt="rain" {...other} />
+    case '11d':
+    case '11n':
+      return <img src={lightning} alt="lightning" {...other} />
+    default:
+      return null
   }
 }

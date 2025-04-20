@@ -3,7 +3,7 @@ import type { Route } from "./+types/home"
 import { fetchWeatherDataByCity } from "../api/open-weather-api"
 import { testData } from "~/api/test-data"
 import type { OneCallResponse } from "~/api/OpenWeatherOneCall.type"
-import { WeatherIcon } from "~/components/WeatherIcon"
+import { SecondaryWeatherIcon, WeatherIcon } from "~/components/WeatherIcon"
 import { Card } from "~/components/ui/Card"
 import { getBackgroundGradientClassName } from "~/util/classname-helper"
 import { twMerge } from "tailwind-merge"
@@ -18,7 +18,7 @@ export function meta({}: Route.MetaArgs) {
 
 export async function loader({ request }: Route.LoaderArgs) {
   const searchParams = new URL(request.url).searchParams
-  let weatherData: OneCallResponse | null = null
+  let weatherData: OneCallResponse | null = testData
   if (searchParams.get('q')) {
     weatherData = await fetchWeatherDataByCity(searchParams.get('q')!)
   }
@@ -42,9 +42,14 @@ export default function Home() {
             <WeatherIcon iconCode={mainWeatherIcon} className="max-w-full translate-y-[40%] -mt-[40%]" />
           </div>
           <div className="w-full rounded-4xl bg-secondary/30 dark:bg-primary/30 backdrop-blur-3xl flex flex-col items-center p-4 md:p-8">
-            <div className="font-family-fancy text-9xl">{Math.round(weatherData.current.temp)}</div>
-            <p>{mainWeather?.description}</p>
-            <p>{`Gefühlt ${Math.round(weatherData.current.feels_like)}°`}</p>
+          <div className="flex justify-center items-center gap-4">
+            <SecondaryWeatherIcon iconCode={mainWeatherIcon} className="w-20 xs:w-32" />
+            <div className="flex flex-col items-center">
+              <div className="font-family-fancy text-8xl xs:text-9xl">{Math.round(weatherData.current.temp)}</div>
+              <p>{mainWeather?.description}</p>
+              <p>{`Gefühlt ${Math.round(weatherData.current.feels_like)}°`}</p>
+            </div>
+          </div>
             <Card className="mt-4 w-full">
               <h3 className="font-family-fancy text-2xl text-center">Stündlich</h3>
             </Card>
