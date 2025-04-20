@@ -1,4 +1,4 @@
-import { useLoaderData, useSearchParams } from "react-router"
+import { redirect, useLoaderData, useSearchParams } from "react-router"
 import type { Route } from "./+types/home"
 import { fetchWeatherDataByCity } from "../api/open-weather-api"
 import { testData } from "~/api/test-data"
@@ -7,7 +7,7 @@ import { SecondaryWeatherIcon, WeatherIcon } from "~/components/WeatherIcon"
 import { Card } from "~/components/ui/Card"
 import { getBackgroundGradientClassName } from "~/util/classname-helper"
 import { twMerge } from "tailwind-merge"
-import { useState } from "react"
+import { z } from "zod"
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -25,16 +25,26 @@ export async function loader({ request }: Route.LoaderArgs) {
   return { weatherData, mainWeatherIcon: weatherData?.current.weather[0].icon }
 }
 
+export async function action({ request }: Route.ActionArgs) {
+  const formData = await request.formData()
+  const searchSchema = z.object({
+    q: z.string()
+  })
+  const parsedFormData = searchSchema.safeParse(Object.fromEntries(formData.entries()))
+  if (!parsedFormData.success) return null
+  return redirect(`/?q=${parsedFormData.data.q}`)
+}
+
 export default function Home() {
-  const [search, setSearch] = useSearchParams()
-  const [query, setQuery] = useState(search.get('q') ?? '')
   const { weatherData, mainWeatherIcon } = useLoaderData<typeof loader>()
   const mainWeather = weatherData?.current.weather[0]
   const backgroundClass = getBackgroundGradientClassName(mainWeatherIcon)
   return (
     <div className="flex flex-col items-center justify-center">
-      <input type="text" className="p-2 border border-gray-300 rounded-lg" value={query ?? ''} onChange={e => setQuery(e.target.value)} />
-      <button className="p-2 border border-gray-300 rounded-lg" onClick={() => setSearch({ q: query })}>ok</button>
+      <form method="post">
+        <input name="q" type="text" className="p-2 border border-gray-300 rounded-lg" />
+        <button className="p-2 border border-gray-300 rounded-lg" type="submit">ok</button>
+      </form>
       <div className={twMerge("absolute top-0 left-0 w-full h-full bg-gradient-to-b dark:to-[#5E687E] dark:from-[#191F2B] -z-10", backgroundClass)} />
       {weatherData !== null ? (
         <>
