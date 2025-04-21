@@ -6,7 +6,7 @@ export function ThemeSelect() {
 
   return (
     <select
-      className="text-primary bg-secondary text-sm rounded-lg block w-full p-2.5 dark:bg-primary-light dark:text-secondary focus:outline-2 focus:outline-offset-0 focus:outline-signal"
+      className="text-primary bg-secondary text-sm rounded-lg block w-full p-2.5 dark:bg-primary-light dark:text-secondary focus:outline-2 focus:outline-offset-0 focus:outline-signal shadow-md"
       defaultValue={selectedValue}
       onChange={event => setThemeSetting(event.target.value as ThemeSetting)}
     >

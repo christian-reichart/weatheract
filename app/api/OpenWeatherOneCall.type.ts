@@ -1,246 +1,133 @@
-export type OneCallResponse = {
-    lat: number
-    lon: number
-    timezone: string
-    timezone_offset: number
-    current: CurrentWeather
-    minutely: Minutely[]
-    hourly: Hourly[]
-    daily: Daily[]
-    alerts?: Alert[]
-}
+import { z } from "zod";
 
-export type CurrentWeather = {
-    dt: number
-    sunrise: number
-    sunset: number
-    temp: number
-    feels_like: number
-    pressure: number
-    humidity: number
-    dew_point: number
-    uvi: number
-    clouds: number
-    visibility: number
-    wind_speed: number
-    wind_deg: number
-    wind_gust?: number
-    rain?: rain1hr
-    snow?: snow1hr
-    weather: Weather[]
-}
+const rain1hrSchema = z.object({
+  "1h": z.number(),
+});
 
-export type rain1hr = {
-    "1h": number // rain volume in mm
-}
+const snow1hrSchema = z.object({
+  "1h": z.number(),
+});
 
-export type snow1hr = {
-    "1h": number // snow volume in mm
-}
+const weatherSchema = z.object({
+  id: z.number(),
+  main: z.string(),
+  description: z.string(),
+  icon: z.string(),
+});
 
-export type Weather = {
-    id: number
-    main: string
-    description: string
-    icon: string
-}
+const currentWeatherSchema = z.object({
+  dt: z.number(),
+  sunrise: z.number(),
+  sunset: z.number(),
+  temp: z.number(),
+  feels_like: z.number(),
+  pressure: z.number(),
+  humidity: z.number(),
+  dew_point: z.number(),
+  uvi: z.number(),
+  clouds: z.number(),
+  visibility: z.number(),
+  wind_speed: z.number(),
+  wind_deg: z.number(),
+  wind_gust: z.number().optional(),
+  rain: rain1hrSchema.optional(),
+  snow: snow1hrSchema.optional(),
+  weather: z.array(weatherSchema),
+});
 
-export type Minutely = {
-    dt: number
-    precipitation: number
-}
+const minutelySchema = z.object({
+  dt: z.number(),
+  precipitation: z.number(),
+});
 
-export type Hourly = {
-    dt: number
-    temp: number
-    feels_like: number
-    pressure: number
-    humidity: number
-    dew_point: number
-    uvi: number
-    clouds: number
-    visibility: number
-    wind_speed: number
-    wind_deg: number
-    wind_gust?: number
-    rain?: rain1hr
-    snow?: snow1hr
-    weather: Weather[]
-    pop: number
-}
+const hourlySchema = z.object({
+  dt: z.number(),
+  temp: z.number(),
+  feels_like: z.number(),
+  pressure: z.number(),
+  humidity: z.number(),
+  dew_point: z.number(),
+  uvi: z.number(),
+  clouds: z.number(),
+  visibility: z.number(),
+  wind_speed: z.number(),
+  wind_deg: z.number(),
+  wind_gust: z.number().optional(),
+  rain: rain1hrSchema.optional(),
+  snow: snow1hrSchema.optional(),
+  weather: z.array(weatherSchema),
+  pop: z.number(),
+});
 
-export type Daily = {
-    dt: number
-    sunrise: number
-    sunset: number
-    moonrise: number
-    moonset: number
-    moon_phase: number
-    summary: string
-    temp: DayTemp
-    feels_like: DayFeelsLike
-    pressure: number
-    humidity: number
-    dew_point: number
-    wind_speed: number
-    wind_deg: number
-    wind_gust?: number
-    weather: Weather[]
-    clouds: number
-    pop: number
-    rain?: number // rain volume in mm
-    snow?: number // snow volume in mm
-    uvi: number
-}
+const dayTempSchema = z.object({
+  day: z.number(),
+  min: z.number(),
+  max: z.number(),
+  night: z.number(),
+  eve: z.number(),
+  morn: z.number(),
+});
 
-export type DayTemp = {
-    day: number
-    min: number
-    max: number
-    night: number
-    eve: number
-    morn: number
-}
+const dayFeelsLikeSchema = z.object({
+  day: z.number(),
+  night: z.number(),
+  eve: z.number(),
+  morn: z.number(),
+});
 
-export type DayFeelsLike = {
-    day: number
-    night: number
-    eve: number
-    morn: number
-}
+const dailySchema = z.object({
+  dt: z.number(),
+  sunrise: z.number(),
+  sunset: z.number(),
+  moonrise: z.number(),
+  moonset: z.number(),
+  moon_phase: z.number(),
+  summary: z.string(),
+  temp: dayTempSchema,
+  feels_like: dayFeelsLikeSchema,
+  pressure: z.number(),
+  humidity: z.number(),
+  dew_point: z.number(),
+  wind_speed: z.number(),
+  wind_deg: z.number(),
+  wind_gust: z.number().optional(),
+  weather: z.array(weatherSchema),
+  clouds: z.number(),
+  pop: z.number(),
+  rain: z.number().optional(),
+  snow: z.number().optional(),
+  uvi: z.number(),
+});
 
-export type Alert = {
-    sender_name: string
-    event: string
-    start: number
-    end: number
-    description: string
-    tags: string[]
-}
+const alertSchema = z.object({
+  sender_name: z.string(),
+  event: z.string(),
+  start: z.number(),
+  end: z.number(),
+  description: z.string(),
+  tags: z.array(z.string()),
+});
 
+export const oneCallResponseSchema = z.object({
+  lat: z.number(),
+  lon: z.number(),
+  timezone: z.string(),
+  timezone_offset: z.number(),
+  current: currentWeatherSchema,
+  minutely: z.array(minutelySchema),
+  hourly: z.array(hourlySchema),
+  daily: z.array(dailySchema),
+  alerts: z.array(alertSchema).optional(),
+});
 
-/*
-
-Example response from OpenWeather API one call 3.0:
-https://openweathermap.org/api/one-call-3
-
-{
-   "lat":33.44,
-   "lon":-94.04,
-   "timezone":"America/Chicago",
-   "timezone_offset":-18000,
-   "current":{
-      "dt":1684929490,
-      "sunrise":1684926645,
-      "sunset":1684977332,
-      "temp":292.55,
-      "feels_like":292.87,
-      "pressure":1014,
-      "humidity":89,
-      "dew_point":290.69,
-      "uvi":0.16,
-      "clouds":53,
-      "visibility":10000,
-      "wind_speed":3.13,
-      "wind_deg":93,
-      "wind_gust":6.71,
-      "weather":[
-         {
-            "id":803,
-            "main":"Clouds",
-            "description":"broken clouds",
-            "icon":"04d"
-         }
-      ]
-   },
-   "minutely":[
-      {
-         "dt":1684929540,
-         "precipitation":0
-      },
-      ...
-   ],
-   "hourly":[
-      {
-         "dt":1684926000,
-         "temp":292.01,
-         "feels_like":292.33,
-         "pressure":1014,
-         "humidity":91,
-         "dew_point":290.51,
-         "uvi":0,
-         "clouds":54,
-         "visibility":10000,
-         "wind_speed":2.58,
-         "wind_deg":86,
-         "wind_gust":5.88,
-         "weather":[
-            {
-               "id":803,
-               "main":"Clouds",
-               "description":"broken clouds",
-               "icon":"04n"
-            }
-         ],
-         "pop":0.15
-      },
-      ...
-   ],
-   "daily":[
-      {
-         "dt":1684951200,
-         "sunrise":1684926645,
-         "sunset":1684977332,
-         "moonrise":1684941060,
-         "moonset":1684905480,
-         "moon_phase":0.16,
-         "summary":"Expect a day of partly cloudy with rain",
-         "temp":{
-            "day":299.03,
-            "min":290.69,
-            "max":300.35,
-            "night":291.45,
-            "eve":297.51,
-            "morn":292.55
-         },
-         "feels_like":{
-            "day":299.21,
-            "night":291.37,
-            "eve":297.86,
-            "morn":292.87
-         },
-         "pressure":1016,
-         "humidity":59,
-         "dew_point":290.48,
-         "wind_speed":3.98,
-         "wind_deg":76,
-         "wind_gust":8.92,
-         "weather":[
-            {
-               "id":500,
-               "main":"Rain",
-               "description":"light rain",
-               "icon":"10d"
-            }
-         ],
-         "clouds":92,
-         "pop":0.47,
-         "rain":0.15,
-         "uvi":9.23
-      },
-      ...
-   ],
-    "alerts": [
-    {
-      "sender_name": "NWS Philadelphia - Mount Holly (New Jersey, Delaware, Southeastern Pennsylvania)",
-      "event": "Small Craft Advisory",
-      "start": 1684952747,
-      "end": 1684988747,
-      "description": "...SMALL CRAFT ADVISORY REMAINS IN EFFECT FROM 5 PM THIS\nAFTERNOON TO 3 AM EST FRIDAY...\n* WHAT...North winds 15 to 20 kt with gusts up to 25 kt and seas\n3 to 5 ft expected.\n* WHERE...Coastal waters from Little Egg Inlet to Great Egg\nInlet NJ out 20 nm, Coastal waters from Great Egg Inlet to\nCape May NJ out 20 nm and Coastal waters from Manasquan Inlet\nto Little Egg Inlet NJ out 20 nm.\n* WHEN...From 5 PM this afternoon to 3 AM EST Friday.\n* IMPACTS...Conditions will be hazardous to small craft.",
-      "tags": [
-
-      ]
-    },
-    ...
-  ]
-*/
+export type OneCallResponse = z.infer<typeof oneCallResponseSchema>;
+export type CurrentWeather = z.infer<typeof currentWeatherSchema>;
+export type Rain1hr = z.infer<typeof rain1hrSchema>;
+export type Snow1hr = z.infer<typeof snow1hrSchema>;
+export type Weather = z.infer<typeof weatherSchema>;
+export type Minutely = z.infer<typeof minutelySchema>;
+export type Hourly = z.infer<typeof hourlySchema>;
+export type Daily = z.infer<typeof dailySchema>;
+export type DayTemp = z.infer<typeof dayTempSchema>;
+export type DayFeelsLike = z.infer<typeof dayFeelsLikeSchema>;
+export type Alert = z.infer<typeof alertSchema>;

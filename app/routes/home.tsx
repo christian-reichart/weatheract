@@ -1,7 +1,6 @@
 import { redirect, useLoaderData, useSearchParams } from "react-router"
 import type { Route } from "./+types/home"
 import { fetchWeatherDataByCity } from "../api/open-weather-api"
-import { testData } from "~/api/test-data"
 import type { OneCallResponse } from "~/api/OpenWeatherOneCall.type"
 import { SecondaryWeatherIcon, WeatherIcon } from "~/components/WeatherIcon"
 import { Card } from "~/components/ui/Card"
@@ -9,6 +8,8 @@ import { getBackgroundGradientClassName } from "~/util/classname-helper"
 import { twMerge } from "tailwind-merge"
 import { z } from "zod"
 import { IconSearch } from "~/components/icons/IconSearch"
+import type { Location } from "~/api/OpenWeatherLocation.type"
+import { formatTimeHHMMWithZone } from "~/util/time"
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -19,11 +20,14 @@ export function meta({}: Route.MetaArgs) {
 
 export async function loader({ request }: Route.LoaderArgs) {
   const searchParams = new URL(request.url).searchParams
-  let weatherData: OneCallResponse | null = testData
+  let weatherData: OneCallResponse | null = null
+  let locationData: Location | null = null
   if (searchParams.get('q')) {
-    weatherData = await fetchWeatherDataByCity(searchParams.get('q')!)
+    const res = await fetchWeatherDataByCity(searchParams.get('q')!)
+    weatherData = res.weatherData
+    locationData = res.locationData
   }
-  return { weatherData, mainWeatherIcon: weatherData?.current.weather[0].icon }
+  return { weatherData, locationData, mainWeatherIcon: weatherData?.current.weather[0].icon }
 }
 
 export async function action({ request }: Route.ActionArgs) {
@@ -37,13 +41,14 @@ export async function action({ request }: Route.ActionArgs) {
 }
 
 export default function Home() {
-  const { weatherData, mainWeatherIcon } = useLoaderData<typeof loader>()
+  const { weatherData, locationData, mainWeatherIcon } = useLoaderData<typeof loader>()
+  const [searchParams] = useSearchParams()
   const mainWeather = weatherData?.current.weather[0]
   const backgroundClass = getBackgroundGradientClassName(mainWeatherIcon)
   return (
     <div className="flex flex-col items-center justify-center">
       <form method="post" className="flex">
-        <input name="q" type="text" className="p-2 pr-10 bg-white dark:bg-primary rounded-lg focus:outline-2 focus:outline-offset-0 focus:outline-signal" />
+        <input name="q" defaultValue={locationData?.local_names?.de ?? searchParams.get('q') ?? ''} type="text" className="p-2 pr-10 bg-white dark:bg-primary rounded-lg focus:outline-2 focus:outline-offset-0 focus:outline-signal shadow-md" />
         <button className="p-2 cursor-pointer flex items-center justify-center -ml-10" type="submit"><IconSearch /></button>
       </form>
       <div className={twMerge("absolute top-0 left-0 w-full h-full bg-gradient-to-b dark:to-[#5E687E] dark:from-[#191F2B] -z-10", backgroundClass)} />
@@ -52,12 +57,12 @@ export default function Home() {
           <div>
             <WeatherIcon iconCode={mainWeatherIcon} className="max-w-full translate-y-[40%] -mt-[40%]" />
           </div>
-          <div className="w-full rounded-4xl bg-secondary/30 dark:bg-primary/30 backdrop-blur-3xl flex flex-col items-center p-4 md:p-8">
+          <div className="w-full rounded-4xl bg-white/30 dark:bg-primary/30 backdrop-blur-3xl flex flex-col items-center p-4 md:p-8">
           <div className="flex justify-center items-center gap-4">
             <SecondaryWeatherIcon iconCode={mainWeatherIcon} className="w-20 xs:w-32" />
             <div className="flex flex-col items-center">
               <div className="font-family-fancy text-8xl xs:text-9xl">{Math.round(weatherData.current.temp)}</div>
-              <p>{mainWeather?.description}</p>
+              <p>{`${formatTimeHHMMWithZone(weatherData.current.dt, weatherData.timezone)} | ${mainWeather?.description}`}</p>
               <p>{`Gefühlt ${Math.round(weatherData.current.feels_like)}°`}</p>
             </div>
           </div>
