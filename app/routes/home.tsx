@@ -48,7 +48,7 @@ export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center mb-24">
       <form method="post" className="flex">
-        <input name="q" defaultValue={locationData?.local_names?.de ?? searchParams.get('q') ?? ''} type="text" className="p-2 pr-10 bg-white dark:bg-primary rounded-lg focus:outline-2 focus:outline-offset-0 focus:outline-signal shadow-md" />
+        <input name="q" defaultValue={locationData?.local_names?.de ?? searchParams.get('q') ?? ''} type="text" className=" w-2xs max-w-screen p-2 pr-10 bg-white dark:bg-primary rounded-lg focus:outline-2 focus:outline-offset-0 focus:outline-signal shadow-md" />
         <button className="p-2 cursor-pointer flex items-center justify-center -ml-10" type="submit"><IconSearch /></button>
       </form>
       <div className={twMerge("fixed top-0 left-0 w-full h-full bg-gradient-to-b dark:to-[#5E687E] dark:from-[#191F2B] -z-10", backgroundClass)} />
