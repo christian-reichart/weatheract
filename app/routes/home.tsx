@@ -8,6 +8,7 @@ import { Card } from "~/components/ui/Card"
 import { getBackgroundGradientClassName } from "~/util/classname-helper"
 import { twMerge } from "tailwind-merge"
 import { z } from "zod"
+import { IconSearch } from "~/components/icons/IconSearch"
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -32,7 +33,7 @@ export async function action({ request }: Route.ActionArgs) {
   })
   const parsedFormData = searchSchema.safeParse(Object.fromEntries(formData.entries()))
   if (!parsedFormData.success) return null
-  return redirect(`/?q=${parsedFormData.data.q}`)
+  return redirect(`/?q=${encodeURIComponent(parsedFormData.data.q)}`)
 }
 
 export default function Home() {
@@ -41,9 +42,9 @@ export default function Home() {
   const backgroundClass = getBackgroundGradientClassName(mainWeatherIcon)
   return (
     <div className="flex flex-col items-center justify-center">
-      <form method="post">
-        <input name="q" type="text" className="p-2 border border-gray-300 rounded-lg" />
-        <button className="p-2 border border-gray-300 rounded-lg" type="submit">ok</button>
+      <form method="post" className="flex">
+        <input name="q" type="text" className="p-2 pr-10 bg-white dark:bg-primary rounded-lg focus:outline-2 focus:outline-offset-0 focus:outline-signal" />
+        <button className="p-2 cursor-pointer flex items-center justify-center -ml-10" type="submit"><IconSearch /></button>
       </form>
       <div className={twMerge("absolute top-0 left-0 w-full h-full bg-gradient-to-b dark:to-[#5E687E] dark:from-[#191F2B] -z-10", backgroundClass)} />
       {weatherData !== null ? (
