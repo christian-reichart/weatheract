@@ -75,7 +75,7 @@ export default function Home() {
                   </ForecastItem>
                 ))}
             </ForecastCard>
-            <ForecastCard className="my-8" headline="Die nächsten Tage">
+            <ForecastCard className="mt-8" headline="Die nächsten Tage">
                 {weatherData.daily.map((dailyWeather, index) => (
                   index === 0 ? null :
                   <ForecastItem key = {dailyWeather.dt} weatherIcon={dailyWeather.weather[0].icon}>
