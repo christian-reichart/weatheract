@@ -52,10 +52,10 @@ export function SecondaryWeatherIcon({ iconCode, ...other }: { iconCode: string 
     case '09n':
     case '10d':
     case '10n':
-      return <img src={rain} alt="rain" {...other} />
+      return <img src={rain} alt="rain" width="200" height="200" {...other} />
     case '11d':
     case '11n':
-      return <img src={lightning} alt="lightning" {...other} />
+      return <img src={lightning} alt="lightning" width="200" height="200" {...other} />
     default:
       return null
   }

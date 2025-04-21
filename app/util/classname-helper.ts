@@ -28,3 +28,20 @@ export function getBackgroundGradientClassName(iconCode: string | undefined) {
     return baseClassName
   }
 }
+
+export function getNightGradientClassName(iconCode: string | undefined) {
+  switch (iconCode) {
+  case '01n':
+  case '02n':
+  case '10n':
+  case '03n':
+  case '04n':
+  case '09n':
+  case '11n':
+  case '13n':
+  case '50n':
+    return "bg-gradient-to-b from-[#222A3A] to-[#222A3A]/0"
+  default:
+    return ""
+  }
+}
