@@ -10,7 +10,7 @@ export function ThemeSelect() {
     <fetcher.Form method="post" action="/actions/theme" className="w-full">
       <select
         name="theme"
-        className="text-primary bg-secondary text-sm rounded-lg block w-full p-2.5 dark:bg-primary-light dark:text-secondary focus:outline-2 focus:outline-offset-0 focus:outline-signal shadow-md"
+        className="text-primary bg-white text-sm rounded-lg block w-full p-2.5 dark:bg-primary-light dark:text-secondary focus:outline-2 focus:outline-offset-0 focus:outline-signal shadow-md"
         defaultValue={defaultVal}
         onChange={(event) => fetcher.submit(event.currentTarget.form)}
       >

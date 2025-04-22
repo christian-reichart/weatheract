@@ -1,3 +1,19 @@
+/**
+ * 01 - clear sky
+ * 02 - few clouds
+ * 03 - scattered clouds
+ * 04 - broken clouds
+ * 09 - shower rain
+ * 10 - rain
+ * 11 - thunderstorm
+ * 13 - snow
+ * 50 - mist
+ * d - day
+ * n - night
+ */
+
+const mainWeatherIcon = '02d'
+
 export const testData = {
   "weatherData": {
     "lat": 48.3668,
@@ -23,7 +39,7 @@ export const testData = {
           "id": 801,
           "main": "Clouds",
           "description": "Ein paar Wolken",
-          "icon": "02d"
+          "icon": mainWeatherIcon,
         }
       ]
     },

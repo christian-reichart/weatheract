@@ -114,7 +114,7 @@ export const oneCallResponseSchema = z.object({
   timezone: z.string(),
   timezone_offset: z.number(),
   current: currentWeatherSchema,
-  minutely: z.array(minutelySchema),
+  minutely: z.array(minutelySchema).optional(),
   hourly: z.array(hourlySchema),
   daily: z.array(dailySchema),
   alerts: z.array(alertSchema).optional(),

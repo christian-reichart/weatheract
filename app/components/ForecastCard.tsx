@@ -5,7 +5,7 @@ import { getBackgroundGradientClassName, getNightGradientClassName } from "~/uti
 
 export function ForecastCard({ headline, children, className, ...other }: { headline: string,children: React.ReactNode } & React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <Card className={twMerge('w-full overflow-auto bg-secondary', className)} {...other}>
+    <Card className={twMerge('w-full overflow-auto bg-white', className)} {...other}>
     <h3 className="font-family-fancy text-2xl text-center sticky left-0 w-full mt-4 mb-8">{headline}</h3>
     <div className="flex justify-between gap-2">
       {children}

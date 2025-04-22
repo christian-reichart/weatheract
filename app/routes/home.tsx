@@ -11,6 +11,7 @@ import type { Location } from "~/api/OpenWeatherLocation.type"
 import { formatDateDDMM, formatTimeHHMMWithZone } from "~/util/time"
 import { ForecastCard, ForecastItem } from "~/components/ForecastCard"
 import { testData } from "~/api/test-data"
+import { ButtonLink } from "~/components/ui/ButtonLink"
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -95,7 +96,20 @@ export default function Home() {
           </div>
         </>
       )
-        : null
+        : (
+          <div className="flex flex-col items-center m-8 gap-4">
+            <h3 className="font-family-fancy text-2xl">Wie wär's mit</h3>
+            <div className="flex flex-wrap justify-center gap-4">
+            <ButtonLink to={{ search: '?q=Augsburg' }}>Augsburg</ButtonLink>
+            <ButtonLink to={{ search: '?q=Berlin' }}>Berlin</ButtonLink>
+            <ButtonLink to={{ search: '?q=Hannover' }}>Hannover</ButtonLink>
+            <ButtonLink to={{ search: '?q=Sydney' }}>Sydney</ButtonLink>
+            <ButtonLink to={{ search: '?q=Kairo' }}>Kairo</ButtonLink>
+            <ButtonLink to={{ search: '?q=Lima' }}>Lima</ButtonLink>
+            <ButtonLink to={{ search: '?q=test-data' }}>test-data</ButtonLink>
+            </div>
+          </div>
+      )
       }
     </div>
   )

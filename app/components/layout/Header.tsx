@@ -17,7 +17,7 @@ export function Header() {
       <button className="absolute right-4 top-4 cursor-pointer p-1 opacity-50 hover:opacity-70 transition-all" onClick={() => setIsSettingsOpen(true)}>
         <IconSettings className={isBackgroundAlwaysDark ? 'text-secondary' : ''} />
       </button>
-      <Dialog open={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} className="w-80 max-w-screen max-h-screen flex flex-col justify-center items-center p-8">
+      <Dialog open={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} className="w-80 max-w-screen max-h-screen flex flex-col justify-center items-center p-8 bg-secondary">
         <h2 className="font-family-fancy text-2xl mb-4">Farbthema</h2>
         <ThemeSelect />
       </Dialog>
