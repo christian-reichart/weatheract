@@ -10,6 +10,7 @@ import { IconSearch } from "~/components/icons/IconSearch"
 import type { Location } from "~/api/OpenWeatherLocation.type"
 import { formatDateDDMM, formatTimeHHMMWithZone } from "~/util/time"
 import { ForecastCard, ForecastItem } from "~/components/ForecastCard"
+import { testData } from "~/api/test-data"
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -22,10 +23,17 @@ export async function loader({ request }: Route.LoaderArgs) {
   const searchParams = new URL(request.url).searchParams
   let weatherData: OneCallResponse | null = null
   let locationData: Location | null = null
-  if (searchParams.get('q')) {
-    const res = await fetchWeatherDataByCity(searchParams.get('q')!)
-    weatherData = res.weatherData
-    locationData = res.locationData
+  const q = searchParams.get('q')
+  if (q) {
+    // FOR TESTING!
+    if (q === 'test-data') {
+      weatherData = testData.weatherData
+      locationData = testData.locationData
+    } else {
+      const res = await fetchWeatherDataByCity(q)
+      weatherData = res.weatherData
+      locationData = res.locationData
+    }
   }
   return { weatherData, locationData, mainWeatherIcon: weatherData?.current.weather[0].icon }
 }
